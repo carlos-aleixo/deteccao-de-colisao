@@ -1,0 +1,63 @@
+let carX, carY;
+let carW = 100;
+let carH = 40;
+
+let speed = 4;
+let direction = -1;
+let impactFrames = 0;
+
+let roadLeft, roadRight, roadTop, roadH;
+
+function setup() {
+  createCanvas(640, 280);
+  roadLeft  = 40;
+  roadRight = width - 40;
+  roadH     = 110;
+  roadTop   = height - roadH - 30;
+  carX = (roadLeft + roadRight) / 2;
+  carY = roadTop + roadH / 2;
+}
+
+function draw() {
+  background(230);
+  rectMode(CORNER);
+  noStroke();
+  fill(60);
+  rect(roadLeft, roadTop, roadRight - roadLeft, roadH, 10);
+  fill(100);
+  rect(roadLeft - 6,  roadTop, 6, roadH);
+  rect(roadRight,     roadTop, 6, roadH);
+
+  let nextX = carX + speed * direction;
+  let half = carW / 2;
+  if (nextX - half < roadLeft || nextX + half > roadRight) {
+    direction = -direction;
+    impactFrames = 15;
+  } else {
+    carX = nextX;
+  }
+
+  rectMode(CENTER);
+  fill(235);
+  rect(carX, carY, carW, carH, 6);
+  fill(200);
+  rect(carX + 10, carY - 14, 46, 18, 4);
+  fill(30);
+  circle(carX - 28, carY + carH / 2, 14);
+  circle(carX + 28, carY + carH / 2, 14);
+  fill(255, 255, 160);
+  rect(carX + carW / 2 - 6, carY - 4, 8, 6, 2);
+  rect(carX + carW / 2 - 6, carY + 4, 8, 6, 2);
+  if (direction === -1) fill(245);
+  else fill(120, 0, 0);
+  rect(carX - carW / 2 + 6, carY - 4, 8, 6, 2);
+  rect(carX - carW / 2 + 6, carY + 4, 8, 6, 2);
+
+  if (impactFrames > 0) {
+    noFill();
+    stroke(255, 80, 80);
+    strokeWeight(3);
+    rect(carX, carY, carW + 12, carH + 12, 8);
+    impactFrames--;
+  }
+}
